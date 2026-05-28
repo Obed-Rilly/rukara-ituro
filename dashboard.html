@@ -152,35 +152,31 @@ let members = JSON.parse(localStorage.getItem("members")) || [];
 function saveMember(){
 
 let name = document.getElementById("name").value;
-
 let number = document.getElementById("number").value;
-
 let family = document.getElementById("family").value;
-
 let santarali = document.getElementById("santarali").value;
-
 let amount = document.getElementById("amount").value;
 
-if(name=="" || number=="" || family=="" || santarali=="" || amount==""){
+if(name === "" || number === "" || family === "" || santarali === "" || amount === ""){
 alert("Uzuza amakuru yose");
 return;
 }
 
 members.push({
-name:name,
-number:number,
-family:family,
-santarali:santarali,
-amount:amount
+name: name,
+number: number,
+family: family,
+santarali: santarali,
+amount: amount
 });
 
 localStorage.setItem("members", JSON.stringify(members));
 
-document.getElementById("name").value="";
-document.getElementById("number").value="";
-document.getElementById("family").value="";
-document.getElementById("santarali").value="";
-document.getElementById("amount").value="";
+document.getElementById("name").value = "";
+document.getElementById("number").value = "";
+document.getElementById("family").value = "";
+document.getElementById("santarali").value = "";
+document.getElementById("amount").value = "";
 
 showMembers();
 
@@ -192,7 +188,7 @@ function showMembers(){
 
 let list = document.getElementById("members");
 
-list.innerHTML="";
+list.innerHTML = "";
 
 let total = 0;
 
@@ -240,10 +236,45 @@ let keyword = document.getElementById("search").value.toLowerCase();
 
 let list = document.getElementById("members");
 
-list.innerHTML="";
+list.innerHTML = "";
 
 members
 .filter(member =>
 member.name.toLowerCase().includes(keyword) ||
 member.number.toLowerCase().includes(keyword) ||
-member.family.toLower
+member.family.toLowerCase().includes(keyword) ||
+member.santarali.toLowerCase().includes(keyword)
+)
+
+.forEach((member,index)=>{
+
+list.innerHTML += `
+<div class="member">
+
+<b>${member.name}</b><br>
+
+Numero: ${member.number}<br>
+
+Umuryango: ${member.family}<br>
+
+Santarali: ${member.santarali}<br>
+
+Ituro: ${member.amount} Frw
+
+</div>
+`;
+
+});
+
+}
+
+function logout(){
+window.location.href = "index.html";
+}
+
+showMembers();
+
+</script>
+
+</body>
+  </html>
