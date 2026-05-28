@@ -3,14 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Rukara Ituro Dashboard</title>
+
 <style>
+
 body{
 font-family:Arial;
 background:#f4f4f4;
-padding:0;
 margin:0;
+padding:0;
 }
+
 header{
 background:#1565c0;
 color:white;
@@ -19,16 +23,19 @@ text-align:center;
 font-size:28px;
 font-weight:bold;
 }
+
 .container{
 padding:15px;
 }
+
 .card{
 background:white;
 padding:15px;
-border-radius:10px;
 margin-bottom:15px;
+border-radius:10px;
 box-shadow:0 2px 5px rgba(0,0,0,0.2);
 }
+
 input{
 width:100%;
 padding:12px;
@@ -38,6 +45,7 @@ border-radius:6px;
 font-size:16px;
 box-sizing:border-box;
 }
+
 button{
 padding:12px 20px;
 border:none;
@@ -46,89 +54,144 @@ margin-top:10px;
 font-size:16px;
 cursor:pointer;
 }
+
 .save{
 background:#1565c0;
 color:white;
+width:100%;
 }
+
 .delete{
 background:red;
 color:white;
 }
+
 .logout{
 background:black;
 color:white;
 width:100%;
 }
+
 .member{
-padding:10px;
+padding:12px;
 border-bottom:1px solid #ddd;
 }
+
 .total{
 font-size:22px;
 font-weight:bold;
 color:#1565c0;
 }
+
 </style>
+
 </head>
+
 <body>
 
-<header>Rukara Ituro Dashboard</header>
+<header>
+Rukara Ituro Dashboard
+</header>
 
 <div class="container">
 
 <div class="card">
+
 <h2>Kwandikisha Umukirisitu</h2>
 
 <input type="text" id="name" placeholder="Amazina">
+
+<input type="text" id="number" placeholder="Numero y'umukirisitu">
+
+<input type="text" id="family" placeholder="Umuryango Remezo">
+
+<input type="text" id="santarali" placeholder="Santarali">
+
 <input type="number" id="amount" placeholder="Ituro">
 
 <button class="save" onclick="saveMember()">Bika</button>
+
 </div>
 
 <div class="card">
-<h2>Shakisha</h2>
-<input type="text" id="search" placeholder="Shakisha umukirisitu" onkeyup="searchMember()">
+
+<h2>Shakisha Umukirisitu</h2>
+
+<input type="text" id="search" placeholder="Shakisha..." onkeyup="searchMember()">
+
 </div>
 
 <div class="card">
+
 <h2>Total y'Amaturo</h2>
+
 <p class="total" id="total">0 Frw</p>
+
 </div>
 
 <div class="card">
+
 <h2>Abakirisitu</h2>
+
 <div id="members"></div>
+
 </div>
 
 <div class="card">
+
 <button class="logout" onclick="logout()">Logout</button>
+
 </div>
 
 </div>
 
 <script>
+
 let members = JSON.parse(localStorage.getItem("members")) || [];
 
 function saveMember(){
+
 let name = document.getElementById("name").value;
+
+let number = document.getElementById("number").value;
+
+let family = document.getElementById("family").value;
+
+let santarali = document.getElementById("santarali").value;
+
 let amount = document.getElementById("amount").value;
 
-if(name=="" || amount==""){
+if(name=="" || number=="" || family=="" || santarali=="" || amount==""){
 alert("Uzuza amakuru yose");
 return;
 }
 
-members.push({name:name, amount:amount});
+members.push({
+name:name,
+number:number,
+family:family,
+santarali:santarali,
+amount:amount
+});
+
 localStorage.setItem("members", JSON.stringify(members));
 
 document.getElementById("name").value="";
+document.getElementById("number").value="";
+document.getElementById("family").value="";
+document.getElementById("santarali").value="";
 document.getElementById("amount").value="";
 
 showMembers();
+
+alert("Byabitswe neza");
+
 }
 
 function showMembers(){
+
 let list = document.getElementById("members");
+
 list.innerHTML="";
 
 let total = 0;
@@ -139,44 +202,48 @@ total += Number(member.amount);
 
 list.innerHTML += `
 <div class="member">
+
 <b>${member.name}</b><br>
-Ituro: ${member.amount} Frw<br>
+
+Numero: ${member.number}<br>
+
+Umuryango: ${member.family}<br>
+
+Santarali: ${member.santarali}<br>
+
+Ituro: ${member.amount} Frw<br><br>
+
 <button class="delete" onclick="deleteMember(${index})">Delete</button>
+
 </div>
 `;
+
 });
 
 document.getElementById("total").innerHTML = total + " Frw";
+
 }
 
 function deleteMember(index){
+
 members.splice(index,1);
+
 localStorage.setItem("members", JSON.stringify(members));
+
 showMembers();
+
 }
 
 function searchMember(){
+
 let keyword = document.getElementById("search").value.toLowerCase();
+
 let list = document.getElementById("members");
+
 list.innerHTML="";
 
-members.filter(member => member.name.toLowerCase().includes(keyword))
-.forEach((member,index)=>{
-list.innerHTML += `
-<div class="member">
-<b>${member.name}</b><br>
-Ituro: ${member.amount} Frw
-</div>
-`;
-});
-}
-
-function logout(){
-window.location.href="index.html";
-}
-
-showMembers();
-</script>
-
-</body>
-</html>
+members
+.filter(member =>
+member.name.toLowerCase().includes(keyword) ||
+member.number.toLowerCase().includes(keyword) ||
+member.family.toLower
