@@ -1,14 +1,106 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Dashboard</title>
+  <title>Dashboard</title>
+
+  <style>
+
+    body{
+      font-family:Arial;
+      background:#f4f4f4;
+      margin:0;
+      padding:0;
+    }
+
+    .header{
+      background:#0066cc;
+      color:white;
+      padding:20px;
+      text-align:center;
+    }
+
+    .container{
+      padding:20px;
+    }
+
+    .card{
+      background:white;
+      padding:20px;
+      margin-bottom:20px;
+      border-radius:10px;
+      box-shadow:0 0 10px rgba(0,0,0,0.1);
+    }
+
+    button{
+      padding:10px 20px;
+      border:none;
+      background:red;
+      color:white;
+      border-radius:5px;
+    }
+
+    input{
+      width:100%;
+      padding:10px;
+      margin-top:10px;
+      margin-bottom:10px;
+    }
+
+  </style>
 </head>
 
 <body>
 
-<h1>Murakaza neza muri Dashboard</h1>
+<div class="header">
+  <h1>Rukara Ituro Dashboard</h1>
+</div>
 
-<p>System ya Paroisse Rukara iri gukora neza.</p>
+<div class="container">
+
+<div class="card">
+<h2>Kwiyandikisha Umukirisitu</h2>
+
+<input id="name" placeholder="Amazina">
+<input id="amount" placeholder="Ituro">
+
+<button onclick="saveMember()">Bika</button>
+</div>
+
+<div class="card">
+<h2>Abakirisitu</h2>
+
+<ul id="list"></ul>
+</div>
+
+<div class="card">
+<button onclick="logout()">Logout</button>
+</div>
+
+</div>
+
+<script>
+
+function saveMember(){
+
+let name = document.getElementById("name").value;
+let amount = document.getElementById("amount").value;
+
+let list = document.getElementById("list");
+
+let li = document.createElement("li");
+li.innerHTML = name + " - " + amount + " Frw";
+
+list.appendChild(li);
+
+alert("Byabitswe neza");
+
+}
+
+function logout(){
+window.location.href = "index.html";
+}
+
+</script>
 
 </body>
 </html>
