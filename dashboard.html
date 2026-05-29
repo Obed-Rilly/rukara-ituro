@@ -386,4 +386,366 @@ Bika Contribution
 
 <div id="results"></div>
 
-</
+</div>
+
+</div>
+
+<script>
+
+document.getElementById("today").innerHTML =
+new Date().toLocaleDateString('en-GB');
+
+let abakristu =
+JSON.parse(localStorage.getItem("abakristu")) || [];
+
+function formatDate(dateString){
+
+if(!dateString) return "";
+
+let d = new Date(dateString);
+
+let day = String(d.getDate()).padStart(2,'0');
+let month = String(d.getMonth()+1).padStart(2,'0');
+let year = d.getFullYear();
+
+return `${day}/${month}/${year}`;
+
+}
+
+function bikaUmukristu(){
+
+let amazina =
+document.getElementById("amazina").value;
+
+let batisimu =
+document.getElementById("batisimu").value;
+
+let santarali =
+document.getElementById("santarali").value;
+
+let umuryangoremezo =
+document.getElementById("umuryangoremezo").value;
+
+let italiki =
+document.getElementById("italiki").value;
+
+let contribution = {
+
+italiki:formatDate(italiki),
+
+kiliziya:Number(document.getElementById("kiliziya").value || 0),
+
+noheli:Number(document.getElementById("noheli").value || 0),
+
+pasika:Number(document.getElementById("pasika").value || 0),
+
+asomusiyo:Number(document.getElementById("asomusiyo").value || 0),
+
+inyubako:Number(document.getElementById("inyubako").value || 0),
+
+diyosezi:Number(document.getElementById("diyosezi").value || 0)
+
+};
+
+if(
+amazina=="" ||
+batisimu=="" ||
+santarali=="" ||
+umuryangoremezo==""
+){
+alert("Uzuza amakuru yose");
+return;
+}
+
+let found =
+abakristu.find(u => u.batisimu === batisimu);
+
+if(found){
+
+found.contributions.push(contribution);
+
+}else{
+
+abakristu.push({
+
+amazina,
+batisimu,
+santarali,
+umuryangoremezo,
+contributions:[contribution]
+
+});
+
+}
+
+localStorage.setItem(
+"abakristu",
+JSON.stringify(abakristu)
+);
+
+clearInputs();
+
+erekanaAbakristu();
+
+updateTotals();
+
+updateFilters();
+
+alert("Byabitswe neza");
+
+}
+
+function clearInputs(){
+
+document.querySelectorAll("input").forEach(input=>{
+
+input.value="";
+
+});
+
+}
+
+function updateTotals(){
+
+let church=0;
+let noheli=0;
+let pasika=0;
+let asomusiyo=0;
+let inyubako=0;
+let diyosezi=0;
+
+abakristu.forEach(u=>{
+
+u.contributions.forEach(c=>{
+
+church += c.kiliziya;
+noheli += c.noheli;
+pasika += c.pasika;
+asomusiyo += c.asomusiyo;
+inyubako += c.inyubako;
+diyosezi += c.diyosezi;
+
+});
+
+});
+
+document.getElementById("totalChurch").innerHTML =
+church + " Frw";
+
+document.getElementById("totalNoheli").innerHTML =
+noheli + " Frw";
+
+document.getElementById("totalPasika").innerHTML =
+pasika + " Frw";
+
+document.getElementById("totalAsomusiyo").innerHTML =
+asomusiyo + " Frw";
+
+document.getElementById("totalInyubako").innerHTML =
+inyubako + " Frw";
+
+document.getElementById("totalDiyosezi").innerHTML =
+diyosezi + " Frw";
+
+}
+
+function updateFilters(){
+
+let santaraliSet = new Set();
+let familySet = new Set();
+
+abakristu.forEach(u=>{
+
+santaraliSet.add(u.santarali);
+familySet.add(u.umuryangoremezo);
+
+});
+
+let santarali =
+document.getElementById("filterSantarali");
+
+let family =
+document.getElementById("filterFamily");
+
+santarali.innerHTML =
+'<option value="">Santarali zose</option>';
+
+family.innerHTML =
+'<option value="">Imiryangoremezo yose</option>';
+
+santaraliSet.forEach(s=>{
+
+santarali.innerHTML +=
+`<option value="${s}">${s}</option>`;
+
+});
+
+familySet.forEach(f=>{
+
+family.innerHTML +=
+`<option value="${f}">${f}</option>`;
+
+});
+
+}
+
+function erekanaAbakristu(){
+
+let keyword =
+document.getElementById("search")
+.value.toLowerCase();
+
+let santaraliFilter =
+document.getElementById("filterSantarali")
+.value;
+
+let familyFilter =
+document.getElementById("filterFamily")
+.value;
+
+let div =
+document.getElementById("results");
+
+div.innerHTML="";
+
+abakristu
+
+.filter(u =>
+
+(u.amazina.toLowerCase().includes(keyword) ||
+u.batisimu.toLowerCase().includes(keyword))
+
+&&
+
+(santaraliFilter=="" ||
+u.santarali==santaraliFilter)
+
+&&
+
+(familyFilter=="" ||
+u.umuryangoremezo==familyFilter)
+
+)
+
+.forEach((u,index)=>{
+
+let totalKiliziya=0;
+let totalNoheli=0;
+let totalPasika=0;
+let totalAsomusiyo=0;
+let totalInyubako=0;
+let totalDiyosezi=0;
+
+u.contributions.forEach(c=>{
+
+totalKiliziya += c.kiliziya;
+totalNoheli += c.noheli;
+totalPasika += c.pasika;
+totalAsomusiyo += c.asomusiyo;
+totalInyubako += c.inyubako;
+totalDiyosezi += c.diyosezi;
+
+});
+
+div.innerHTML += `
+
+<div class="member-card">
+
+<h2>${u.amazina}</h2>
+
+<p><b>No:</b> ${u.batisimu}</p>
+
+<p><b>Santarali:</b> ${u.santarali}</p>
+
+<p><b>Umuryangoremezo:</b> ${u.umuryangoremezo}</p>
+
+<br>
+
+<p><b>Total Kiliziya:</b> ${totalKiliziya} Frw</p>
+
+<p><b>Total Noheli:</b> ${totalNoheli} Frw</p>
+
+<p><b>Total Pasika:</b> ${totalPasika} Frw</p>
+
+<p><b>Total Asomusiyo:</b> ${totalAsomusiyo} Frw</p>
+
+<p><b>Total Inyubako:</b> ${totalInyubako} Frw</p>
+
+<p><b>Total Diyosezi:</b> ${totalDiyosezi} Frw</p>
+
+<br>
+
+<h3>Contributions zose</h3>
+
+${u.contributions.map(c => `
+
+<div class="contrib">
+
+<p><b>Itariki:</b> ${c.italiki}</p>
+
+<p>Kiliziya: ${c.kiliziya} Frw</p>
+
+<p>Noheli: ${c.noheli} Frw</p>
+
+<p>Pasika: ${c.pasika} Frw</p>
+
+<p>Asomusiyo: ${c.asomusiyo} Frw</p>
+
+<p>Inyubako: ${c.inyubako} Frw</p>
+
+<p>Diyosezi: ${c.diyosezi} Frw</p>
+
+</div>
+
+`).join("")}
+
+<button class="delete"
+onclick="deleteMember(${index})">
+
+Delete
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+function deleteMember(index){
+
+if(confirm("Delete uyu mukristu?")){
+
+abakristu.splice(index,1);
+
+localStorage.setItem(
+"abakristu",
+JSON.stringify(abakristu)
+);
+
+erekanaAbakristu();
+
+updateTotals();
+
+updateFilters();
+
+}
+
+}
+
+function logout(){
+
+window.location.href="index.html";
+
+}
+
+erekanaAbakristu();
+updateTotals();
+updateFilters();
+
+</script>
+
+</body>
+  </html>
