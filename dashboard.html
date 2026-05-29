@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
@@ -31,6 +30,7 @@ color:white;
 min-height:100vh;
 padding:20px;
 position:fixed;
+overflow:auto;
 }
 
 .logo{
@@ -40,12 +40,10 @@ margin-bottom:30px;
 
 .logo h2{
 font-size:30px;
-margin-top:15px;
 }
 
 .logo p{
 margin-top:10px;
-font-size:14px;
 }
 
 .menu a{
@@ -56,7 +54,7 @@ background:rgba(255,255,255,0.1);
 border-radius:8px;
 color:white;
 text-decoration:none;
-font-size:18px;
+font-size:17px;
 }
 
 .menu a:hover{
@@ -64,13 +62,13 @@ background:white;
 color:#5b2c06;
 }
 
+/* MAIN */
+
 .main{
 margin-left:260px;
 width:100%;
 padding:20px;
 }
-
-/* HEADER */
 
 .header{
 background:white;
@@ -86,7 +84,7 @@ box-shadow:0 2px 5px rgba(0,0,0,0.1);
 color:#5b2c06;
 }
 
-/* TOTAL CARDS */
+/* TOTALS */
 
 .cards{
 display:grid;
@@ -129,7 +127,7 @@ gap:15px;
 margin-top:20px;
 }
 
-input, select{
+input,select{
 padding:12px;
 border:1px solid #ccc;
 border-radius:8px;
@@ -154,15 +152,6 @@ width:100%;
 
 .save-btn:hover{
 background:#7a3d0c;
-}
-
-/* FILTERS */
-
-.filters{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:15px;
-margin-top:20px;
 }
 
 /* TABLE */
@@ -200,13 +189,26 @@ color:white;
 padding:8px 12px;
 }
 
-.footer{
-margin-top:20px;
-text-align:center;
-color:#666;
+.view{
+background:#1565c0;
+color:white;
+padding:8px 12px;
 }
 
-/* MOBILE */
+.member-card{
+background:#f8f8f8;
+padding:15px;
+margin-top:15px;
+border-radius:10px;
+}
+
+.contrib{
+background:white;
+padding:10px;
+margin-top:10px;
+border-radius:10px;
+border-left:5px solid #5b2c06;
+}
 
 @media(max-width:900px){
 
@@ -240,12 +242,12 @@ margin-left:0;
 
 <h2>RUKARA</h2>
 
-<p>Diyosezi Kibungo<br>Paroisse Rukara</p>
+<p>Paroisse Rukara</p>
 
 <br>
 
 <p>
-“Ifishi y'ibikorwa by'umukristu”
+Ifishi y'ibikorwa by'umukristu
 </p>
 
 </div>
@@ -253,15 +255,9 @@ margin-left:0;
 <div class="menu">
 
 <a href="#">Dashboard</a>
-
 <a href="#">Abakristu</a>
-
-<a href="#">Raporo</a>
-
 <a href="#">Santarali</a>
-
 <a href="#">Umuryangoremezo</a>
-
 <a href="#" onclick="logout()">Logout</a>
 
 </div>
@@ -320,19 +316,19 @@ margin-left:0;
 
 <div class="form-section">
 
-<h2>Kwandikisha Umukristu</h2>
+<h2>Kwandikisha Contribution</h2>
 
 <div class="form-grid">
 
-<input type="text" id="name" placeholder="Amazina">
+<input type="text" id="amazina" placeholder="Amazina">
 
-<input type="text" id="number" placeholder="Numero y'umukristu">
+<input type="text" id="batisimu" placeholder="No y'Umukristu">
 
 <input type="text" id="santarali" placeholder="Santarali">
 
-<input type="text" id="family" placeholder="Umuryangoremezo">
+<input type="text" id="umuryangoremezo" placeholder="Umuryangoremezo">
 
-<input type="number" id="church" placeholder="Ituro rya Kiliziya">
+<input type="number" id="kiliziya" placeholder="Ituro rya Kiliziya">
 
 <input type="number" id="noheli" placeholder="Noheli">
 
@@ -344,12 +340,14 @@ margin-left:0;
 
 <input type="number" id="diyosezi" placeholder="Inkunga ya Diyosezi">
 
-<input type="date" id="date">
+<input type="date" id="italiki">
 
 </div>
 
-<button class="save-btn" onclick="saveMember()">
-Bika Umukristu
+<button class="save-btn" onclick="bikaUmukristu()">
+
+Bika Contribution
+
 </button>
 
 </div>
@@ -358,19 +356,19 @@ Bika Umukristu
 
 <div class="form-section">
 
-<h2>Shakisha no Gutandukanya</h2>
+<h2>Filters</h2>
 
-<div class="filters">
+<div class="form-grid">
 
-<input type="text" id="search" placeholder="Shakisha..." onkeyup="showMembers()">
+<input type="text" id="search" placeholder="Shakisha..." onkeyup="erekanaAbakristu()">
 
-<select id="filterSantarali" onchange="showMembers()">
+<select id="filterSantarali" onchange="erekanaAbakristu()">
 
 <option value="">Santarali zose</option>
 
 </select>
 
-<select id="filterFamily" onchange="showMembers()">
+<select id="filterFamily" onchange="erekanaAbakristu()">
 
 <option value="">Imiryangoremezo yose</option>
 
@@ -380,312 +378,12 @@ Bika Umukristu
 
 </div>
 
-<!-- TABLE -->
+<!-- MEMBERS -->
 
 <div class="table-section">
 
-<h2>Abakristu Banditswe</h2>
+<h2>Abakristu</h2>
 
-<table>
+<div id="results"></div>
 
-<thead>
-
-<tr>
-
-<th>Amazina</th>
-<th>Numero</th>
-<th>Santarali</th>
-<th>Umuryangoremezo</th>
-<th>Kiliziya</th>
-<th>Noheli</th>
-<th>Pasika</th>
-<th>Asomusiyo</th>
-<th>Inyubako</th>
-<th>Diyosezi</th>
-<th>Itariki</th>
-<th>Action</th>
-
-</tr>
-
-</thead>
-
-<tbody id="members">
-
-</tbody>
-
-</table>
-
-</div>
-
-<div class="footer">
-
-Rukara Ituro System © 2025
-
-</div>
-
-</div>
-
-<script>
-
-document.getElementById("today").innerHTML =
-new Date().toLocaleDateString();
-
-let members =
-JSON.parse(localStorage.getItem("members")) || [];
-
-function saveMember(){
-
-let member = {
-
-name:document.getElementById("name").value,
-number:document.getElementById("number").value,
-santarali:document.getElementById("santarali").value,
-family:document.getElementById("family").value,
-
-church:Number(document.getElementById("church").value || 0),
-noheli:Number(document.getElementById("noheli").value || 0),
-pasika:Number(document.getElementById("pasika").value || 0),
-asomusiyo:Number(document.getElementById("asomusiyo").value || 0),
-inyubako:Number(document.getElementById("inyubako").value || 0),
-diyosezi:Number(document.getElementById("diyosezi").value || 0),
-
-date:document.getElementById("date").value
-
-};
-
-if(member.name=="" ||
-member.number=="" ||
-member.santarali=="" ||
-member.family==""){
-
-alert("Uzuza amakuru yose");
-return;
-
-}
-
-members.push(member);
-
-localStorage.setItem(
-"members",
-JSON.stringify(members)
-);
-
-clearInputs();
-
-showMembers();
-
-updateTotals();
-
-updateFilters();
-
-alert("Byabitswe neza");
-
-}
-
-function clearInputs(){
-
-document.querySelectorAll("input").forEach(input=>{
-
-if(input.type!="text" && input.type!="number" && input.type!="date") return;
-
-input.value="";
-
-});
-
-}
-
-function updateTotals(){
-
-let church=0;
-let noheli=0;
-let pasika=0;
-let asomusiyo=0;
-let inyubako=0;
-let diyosezi=0;
-
-members.forEach(m=>{
-
-church += m.church;
-noheli += m.noheli;
-pasika += m.pasika;
-asomusiyo += m.asomusiyo;
-inyubako += m.inyubako;
-diyosezi += m.diyosezi;
-
-});
-
-document.getElementById("totalChurch").innerHTML =
-church + " Frw";
-
-document.getElementById("totalNoheli").innerHTML =
-noheli + " Frw";
-
-document.getElementById("totalPasika").innerHTML =
-pasika + " Frw";
-
-document.getElementById("totalAsomusiyo").innerHTML =
-asomusiyo + " Frw";
-
-document.getElementById("totalInyubako").innerHTML =
-inyubako + " Frw";
-
-document.getElementById("totalDiyosezi").innerHTML =
-diyosezi + " Frw";
-
-}
-
-function updateFilters(){
-
-let santaraliSet = new Set();
-let familySet = new Set();
-
-members.forEach(m=>{
-
-santaraliSet.add(m.santarali);
-familySet.add(m.family);
-
-});
-
-let santaraliSelect =
-document.getElementById("filterSantarali");
-
-let familySelect =
-document.getElementById("filterFamily");
-
-santaraliSelect.innerHTML =
-'<option value="">Santarali zose</option>';
-
-familySelect.innerHTML =
-'<option value="">Imiryangoremezo yose</option>';
-
-santaraliSet.forEach(s=>{
-
-santaraliSelect.innerHTML +=
-`<option value="${s}">${s}</option>`;
-
-});
-
-familySet.forEach(f=>{
-
-familySelect.innerHTML +=
-`<option value="${f}">${f}</option>`;
-
-});
-
-}
-
-function showMembers(){
-
-let keyword =
-document.getElementById("search")
-.value.toLowerCase();
-
-let santaraliFilter =
-document.getElementById("filterSantarali")
-.value;
-
-let familyFilter =
-document.getElementById("filterFamily")
-.value;
-
-let tbody =
-document.getElementById("members");
-
-tbody.innerHTML="";
-
-members
-.filter(m=>{
-
-return (
-
-(m.name.toLowerCase().includes(keyword) ||
-m.number.toLowerCase().includes(keyword))
-
-&&
-
-(santaraliFilter=="" ||
-m.santarali==santaraliFilter)
-
-&&
-
-(familyFilter=="" ||
-m.family==familyFilter)
-
-);
-
-})
-
-.forEach((m,index)=>{
-
-tbody.innerHTML += `
-
-<tr>
-
-<td>${m.name}</td>
-<td>${m.number}</td>
-<td>${m.santarali}</td>
-<td>${m.family}</td>
-
-<td>${m.church}</td>
-<td>${m.noheli}</td>
-<td>${m.pasika}</td>
-<td>${m.asomusiyo}</td>
-<td>${m.inyubako}</td>
-<td>${m.diyosezi}</td>
-
-<td>${m.date}</td>
-
-<td>
-
-<button class="delete"
-onclick="deleteMember(${index})">
-
-Delete
-
-</button>
-
-</td>
-
-</tr>
-
-`;
-
-});
-
-}
-
-function deleteMember(index){
-
-if(confirm("Delete uyu mukristu?")){
-
-members.splice(index,1);
-
-localStorage.setItem(
-"members",
-JSON.stringify(members)
-);
-
-showMembers();
-
-updateTotals();
-
-updateFilters();
-
-}
-
-}
-
-function logout(){
-
-window.location.href="index.html";
-
-}
-
-showMembers();
-updateTotals();
-updateFilters();
-
-</script>
-
-</body>
-  </html>
+</
