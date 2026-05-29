@@ -1,14 +1,18 @@
-// Firebase Import
+// FIREBASE VERSION 3 - RUKARA ITURO SYSTEM
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getFirestore,
   collection,
   addDoc,
-  getDocs
+  getDocs,
+  doc,
+  updateDoc,
+  getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Firebase Config
+// FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyBKy8BRVEykWT0H2Ro-3yKuD8HsFyk12sk",
   authDomain: "rukara-ituro-system.firebaseapp.com",
@@ -18,78 +22,87 @@ const firebaseConfig = {
   appId: "1:638528716738:web:3e55d50d52b94006afe05b"
 };
 
-// Initialize Firebase
+// INITIALIZE
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Save Christian
-window.saveChristian = async function () {
+// SAVE MEMBER
+window.saveMember = async function () {
 
-  let amazina = document.getElementById("amazina").value;
-  let phone = document.getElementById("phone").value;
-  let santarali = document.getElementById("santarali").value;
-  let umuryangoremezo = document.getElementById("umuryangoremezo").value;
-  let contributionYear = document.getElementById("year").value;
-  let contributionDate = document.getElementById("date").value;
+  const amazina = document.getElementById("amazina").value;
+  const phone = document.getElementById("phone").value;
+  const santarali = document.getElementById("santarali").value;
+  const umuryangoremezo = document.getElementById("umuryangoremezo").value;
+  const umwaka = document.getElementById("umwaka").value;
 
-  let kiliziya = document.getElementById("kiliziya").value;
-  let noheli = document.getElementById("noheli").value;
-  let pasika = document.getElementById("pasika").value;
-  let asomusiyo = document.getElementById("asomusiyo").value;
-  let inyubako = document.getElementById("inyubako").value;
-  let diyosezi = document.getElementById("diyosezi").value;
+  const kiliziya = Number(document.getElementById("kiliziya").value || 0);
+  const noheli = Number(document.getElementById("noheli").value || 0);
+  const pasika = Number(document.getElementById("pasika").value || 0);
+  const asomusiyo = Number(document.getElementById("asomusiyo").value || 0);
+  const inyubako = Number(document.getElementById("inyubako").value || 0);
+  const diyosezi = Number(document.getElementById("diyosezi").value || 0);
 
-  await addDoc(collection(db, "abakristu"), {
-    amazina,
-    phone,
-    santarali,
-    umuryangoremezo,
-    contributionYear,
-    contributionDate,
-    kiliziya,
-    noheli,
-    pasika,
-    asomusiyo,
-    inyubako,
-    diyosezi
-  });
+  const italiki = document.getElementById("italiki").value;
 
-  alert("Amakuru yabitswe neza");
+  try {
 
-  window.location.href = "dashboard.html";
+    await addDoc(collection(db, "abakristu"), {
+
+      amazina,
+      phone,
+      santarali,
+      umuryangoremezo,
+      umwaka,
+
+      contributions: {
+        kiliziya,
+        noheli,
+        pasika,
+        asomusiyo,
+        inyubako,
+        diyosezi
+      },
+
+      italiki,
+      createdAt: new Date()
+
+    });
+
+    alert("Umukristu yabitswe neza");
+
+    window.location.href = "dashboard.html";
+
+  } catch (error) {
+
+    alert("Hari ikibazo: " + error);
+
+  }
+
 };
 
-// Load Christians
-window.loadChristians = async function () {
-
-  let list = document.getElementById("list");
-  list.innerHTML = "";
+// LOAD MEMBERS
+window.loadMembers = async function () {
 
   const querySnapshot = await getDocs(collection(db, "abakristu"));
 
-  querySnapshot.forEach((doc) => {
+  let output = "";
 
-    let data = doc.data();
+  querySnapshot.forEach((docu) => {
 
-    list.innerHTML += `
+    const data = docu.data();
+
+    output += `
       <div class="member-card">
         <h3>${data.amazina}</h3>
-
-        <p><b>Phone:</b> ${data.phone}</p>
-        <p><b>Santarali:</b> ${data.santarali}</p>
-        <p><b>Umuryangoremezo:</b> ${data.umuryangoremezo}</p>
-        <p><b>Umwaka:</b> ${data.contributionYear}</p>
-        <p><b>Italiki:</b> ${data.contributionDate}</p>
-
-        <hr>
-
-        <p>Kiliziya: ${data.kiliziya}</p>
-        <p>Noheli: ${data.noheli}</p>
-        <p>Pasika: ${data.pasika}</p>
-        <p>Asomusiyo: ${data.asomusiyo}</p>
-        <p>Inyubako: ${data.inyubako}</p>
-        <p>Diyosezi: ${data.diyosezi}</p>
+        <p>Santarali: ${data.santarali}</p>
+        <p>Umuryangoremezo: ${data.umuryangoremezo}</p>
+        <p>Phone: ${data.phone || "-"}</p>
+        <p>Umwaka: ${data.umwaka}</p>
       </div>
     `;
+
   });
-    }
+
+  document.getElementById("members").innerHTML = output;
+
+};
