@@ -1,86 +1,229 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Rukara Ituro Dashboard</title>
+<title>Rukara Ituro System</title>
 
 <style>
 
-body{
-font-family:Arial;
-background:#f4f4f4;
+*{
 margin:0;
 padding:0;
+box-sizing:border-box;
+font-family:Arial;
 }
 
-header{
-background:#1565c0;
+body{
+background:#f5f5f5;
+display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:260px;
+background:#5b2c06;
 color:white;
+min-height:100vh;
 padding:20px;
-text-align:center;
-font-size:28px;
-font-weight:bold;
+position:fixed;
 }
 
-.container{
-padding:15px;
+.logo{
+text-align:center;
+margin-bottom:30px;
+}
+
+.logo h2{
+font-size:30px;
+margin-top:15px;
+}
+
+.logo p{
+margin-top:10px;
+font-size:14px;
+}
+
+.menu a{
+display:block;
+padding:14px;
+margin-top:10px;
+background:rgba(255,255,255,0.1);
+border-radius:8px;
+color:white;
+text-decoration:none;
+font-size:18px;
+}
+
+.menu a:hover{
+background:white;
+color:#5b2c06;
+}
+
+.main{
+margin-left:260px;
+width:100%;
+padding:20px;
+}
+
+/* HEADER */
+
+.header{
+background:white;
+padding:20px;
+border-radius:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+.header h1{
+color:#5b2c06;
+}
+
+/* TOTAL CARDS */
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+margin-top:20px;
 }
 
 .card{
 background:white;
-padding:15px;
-margin-bottom:15px;
-border-radius:10px;
-box-shadow:0 2px 5px rgba(0,0,0,0.2);
+padding:20px;
+border-radius:12px;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
 }
 
-input{
-width:100%;
+.card h3{
+color:#5b2c06;
+margin-bottom:10px;
+}
+
+.amount{
+font-size:24px;
+font-weight:bold;
+}
+
+/* FORM */
+
+.form-section{
+background:white;
+margin-top:20px;
+padding:20px;
+border-radius:12px;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+margin-top:20px;
+}
+
+input, select{
 padding:12px;
-margin-top:10px;
 border:1px solid #ccc;
-border-radius:6px;
+border-radius:8px;
 font-size:16px;
-box-sizing:border-box;
+width:100%;
 }
 
 button{
 padding:12px 20px;
 border:none;
-border-radius:6px;
-margin-top:10px;
+border-radius:8px;
 font-size:16px;
 cursor:pointer;
 }
 
-.save{
-background:#1565c0;
+.save-btn{
+background:#5b2c06;
 color:white;
+margin-top:20px;
 width:100%;
+}
+
+.save-btn:hover{
+background:#7a3d0c;
+}
+
+/* FILTERS */
+
+.filters{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+margin-top:20px;
+}
+
+/* TABLE */
+
+.table-section{
+background:white;
+margin-top:20px;
+padding:20px;
+border-radius:12px;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
+overflow:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+table th{
+background:#5b2c06;
+color:white;
+padding:12px;
+}
+
+table td{
+padding:10px;
+border-bottom:1px solid #ddd;
+text-align:center;
 }
 
 .delete{
 background:red;
 color:white;
+padding:8px 12px;
 }
 
-.logout{
-background:black;
-color:white;
+.footer{
+margin-top:20px;
+text-align:center;
+color:#666;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+body{
+display:block;
+}
+
+.sidebar{
+position:relative;
 width:100%;
+min-height:auto;
 }
 
-.member{
-padding:12px;
-border-bottom:1px solid #ddd;
+.main{
+margin-left:0;
 }
 
-.total{
-font-size:22px;
-font-weight:bold;
-color:#1565c0;
 }
 
 </style>
@@ -89,57 +232,194 @@ color:#1565c0;
 
 <body>
 
-<header>
-Rukara Ituro Dashboard
-</header>
+<!-- SIDEBAR -->
 
-<div class="container">
+<div class="sidebar">
+
+<div class="logo">
+
+<h2>RUKARA</h2>
+
+<p>Diyosezi Kibungo<br>Paroisse Rukara</p>
+
+<br>
+
+<p>
+“Ifishi y'ibikorwa by'umukristu”
+</p>
+
+</div>
+
+<div class="menu">
+
+<a href="#">Dashboard</a>
+
+<a href="#">Abakristu</a>
+
+<a href="#">Raporo</a>
+
+<a href="#">Santarali</a>
+
+<a href="#">Umuryangoremezo</a>
+
+<a href="#" onclick="logout()">Logout</a>
+
+</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="header">
+
+<h1>Rukara Ituro System</h1>
+
+<h3 id="today"></h3>
+
+</div>
+
+<!-- TOTALS -->
+
+<div class="cards">
 
 <div class="card">
+<h3>Total Kiliziya</h3>
+<p class="amount" id="totalChurch">0 Frw</p>
+</div>
 
-<h2>Kwandikisha Umukirisitu</h2>
+<div class="card">
+<h3>Total Noheli</h3>
+<p class="amount" id="totalNoheli">0 Frw</p>
+</div>
+
+<div class="card">
+<h3>Total Pasika</h3>
+<p class="amount" id="totalPasika">0 Frw</p>
+</div>
+
+<div class="card">
+<h3>Total Asomusiyo</h3>
+<p class="amount" id="totalAsomusiyo">0 Frw</p>
+</div>
+
+<div class="card">
+<h3>Total Inyubako</h3>
+<p class="amount" id="totalInyubako">0 Frw</p>
+</div>
+
+<div class="card">
+<h3>Total Diyosezi</h3>
+<p class="amount" id="totalDiyosezi">0 Frw</p>
+</div>
+
+</div>
+
+<!-- FORM -->
+
+<div class="form-section">
+
+<h2>Kwandikisha Umukristu</h2>
+
+<div class="form-grid">
 
 <input type="text" id="name" placeholder="Amazina">
 
-<input type="text" id="number" placeholder="Numero y'umukirisitu">
-
-<input type="text" id="family" placeholder="Umuryango Remezo">
+<input type="text" id="number" placeholder="Numero y'umukristu">
 
 <input type="text" id="santarali" placeholder="Santarali">
 
-<input type="number" id="amount" placeholder="Ituro">
+<input type="text" id="family" placeholder="Umuryangoremezo">
 
-<button class="save" onclick="saveMember()">Bika</button>
+<input type="number" id="church" placeholder="Ituro rya Kiliziya">
 
-</div>
+<input type="number" id="noheli" placeholder="Noheli">
 
-<div class="card">
+<input type="number" id="pasika" placeholder="Pasika">
 
-<h2>Shakisha Umukirisitu</h2>
+<input type="number" id="asomusiyo" placeholder="Asomusiyo">
 
-<input type="text" id="search" placeholder="Shakisha..." onkeyup="searchMember()">
+<input type="number" id="inyubako" placeholder="Inyubako">
 
-</div>
+<input type="number" id="diyosezi" placeholder="Inkunga ya Diyosezi">
 
-<div class="card">
-
-<h2>Total y'Amaturo</h2>
-
-<p class="total" id="total">0 Frw</p>
+<input type="date" id="date">
 
 </div>
 
-<div class="card">
-
-<h2>Abakirisitu</h2>
-
-<div id="members"></div>
+<button class="save-btn" onclick="saveMember()">
+Bika Umukristu
+</button>
 
 </div>
 
-<div class="card">
+<!-- FILTERS -->
 
-<button class="logout" onclick="logout()">Logout</button>
+<div class="form-section">
+
+<h2>Shakisha no Gutandukanya</h2>
+
+<div class="filters">
+
+<input type="text" id="search" placeholder="Shakisha..." onkeyup="showMembers()">
+
+<select id="filterSantarali" onchange="showMembers()">
+
+<option value="">Santarali zose</option>
+
+</select>
+
+<select id="filterFamily" onchange="showMembers()">
+
+<option value="">Imiryangoremezo yose</option>
+
+</select>
+
+</div>
+
+</div>
+
+<!-- TABLE -->
+
+<div class="table-section">
+
+<h2>Abakristu Banditswe</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Amazina</th>
+<th>Numero</th>
+<th>Santarali</th>
+<th>Umuryangoremezo</th>
+<th>Kiliziya</th>
+<th>Noheli</th>
+<th>Pasika</th>
+<th>Asomusiyo</th>
+<th>Inyubako</th>
+<th>Diyosezi</th>
+<th>Itariki</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="members">
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="footer">
+
+Rukara Ituro System © 2025
 
 </div>
 
@@ -147,132 +427,263 @@ Rukara Ituro Dashboard
 
 <script>
 
-let members = JSON.parse(localStorage.getItem("members")) || [];
+document.getElementById("today").innerHTML =
+new Date().toLocaleDateString();
+
+let members =
+JSON.parse(localStorage.getItem("members")) || [];
 
 function saveMember(){
 
-let name = document.getElementById("name").value;
-let number = document.getElementById("number").value;
-let family = document.getElementById("family").value;
-let santarali = document.getElementById("santarali").value;
-let amount = document.getElementById("amount").value;
+let member = {
 
-if(name === "" || number === "" || family === "" || santarali === "" || amount === ""){
+name:document.getElementById("name").value,
+number:document.getElementById("number").value,
+santarali:document.getElementById("santarali").value,
+family:document.getElementById("family").value,
+
+church:Number(document.getElementById("church").value || 0),
+noheli:Number(document.getElementById("noheli").value || 0),
+pasika:Number(document.getElementById("pasika").value || 0),
+asomusiyo:Number(document.getElementById("asomusiyo").value || 0),
+inyubako:Number(document.getElementById("inyubako").value || 0),
+diyosezi:Number(document.getElementById("diyosezi").value || 0),
+
+date:document.getElementById("date").value
+
+};
+
+if(member.name=="" ||
+member.number=="" ||
+member.santarali=="" ||
+member.family==""){
+
 alert("Uzuza amakuru yose");
 return;
+
 }
 
-members.push({
-name: name,
-number: number,
-family: family,
-santarali: santarali,
-amount: amount
-});
+members.push(member);
 
-localStorage.setItem("members", JSON.stringify(members));
+localStorage.setItem(
+"members",
+JSON.stringify(members)
+);
 
-document.getElementById("name").value = "";
-document.getElementById("number").value = "";
-document.getElementById("family").value = "";
-document.getElementById("santarali").value = "";
-document.getElementById("amount").value = "";
+clearInputs();
 
 showMembers();
+
+updateTotals();
+
+updateFilters();
 
 alert("Byabitswe neza");
 
 }
 
-function showMembers(){
+function clearInputs(){
 
-let list = document.getElementById("members");
+document.querySelectorAll("input").forEach(input=>{
 
-list.innerHTML = "";
+if(input.type!="text" && input.type!="number" && input.type!="date") return;
 
-let total = 0;
-
-members.forEach((member,index)=>{
-
-total += Number(member.amount);
-
-list.innerHTML += `
-<div class="member">
-
-<b>${member.name}</b><br>
-
-Numero: ${member.number}<br>
-
-Umuryango: ${member.family}<br>
-
-Santarali: ${member.santarali}<br>
-
-Ituro: ${member.amount} Frw<br><br>
-
-<button class="delete" onclick="deleteMember(${index})">Delete</button>
-
-</div>
-`;
+input.value="";
 
 });
 
-document.getElementById("total").innerHTML = total + " Frw";
+}
+
+function updateTotals(){
+
+let church=0;
+let noheli=0;
+let pasika=0;
+let asomusiyo=0;
+let inyubako=0;
+let diyosezi=0;
+
+members.forEach(m=>{
+
+church += m.church;
+noheli += m.noheli;
+pasika += m.pasika;
+asomusiyo += m.asomusiyo;
+inyubako += m.inyubako;
+diyosezi += m.diyosezi;
+
+});
+
+document.getElementById("totalChurch").innerHTML =
+church + " Frw";
+
+document.getElementById("totalNoheli").innerHTML =
+noheli + " Frw";
+
+document.getElementById("totalPasika").innerHTML =
+pasika + " Frw";
+
+document.getElementById("totalAsomusiyo").innerHTML =
+asomusiyo + " Frw";
+
+document.getElementById("totalInyubako").innerHTML =
+inyubako + " Frw";
+
+document.getElementById("totalDiyosezi").innerHTML =
+diyosezi + " Frw";
+
+}
+
+function updateFilters(){
+
+let santaraliSet = new Set();
+let familySet = new Set();
+
+members.forEach(m=>{
+
+santaraliSet.add(m.santarali);
+familySet.add(m.family);
+
+});
+
+let santaraliSelect =
+document.getElementById("filterSantarali");
+
+let familySelect =
+document.getElementById("filterFamily");
+
+santaraliSelect.innerHTML =
+'<option value="">Santarali zose</option>';
+
+familySelect.innerHTML =
+'<option value="">Imiryangoremezo yose</option>';
+
+santaraliSet.forEach(s=>{
+
+santaraliSelect.innerHTML +=
+`<option value="${s}">${s}</option>`;
+
+});
+
+familySet.forEach(f=>{
+
+familySelect.innerHTML +=
+`<option value="${f}">${f}</option>`;
+
+});
+
+}
+
+function showMembers(){
+
+let keyword =
+document.getElementById("search")
+.value.toLowerCase();
+
+let santaraliFilter =
+document.getElementById("filterSantarali")
+.value;
+
+let familyFilter =
+document.getElementById("filterFamily")
+.value;
+
+let tbody =
+document.getElementById("members");
+
+tbody.innerHTML="";
+
+members
+.filter(m=>{
+
+return (
+
+(m.name.toLowerCase().includes(keyword) ||
+m.number.toLowerCase().includes(keyword))
+
+&&
+
+(santaraliFilter=="" ||
+m.santarali==santaraliFilter)
+
+&&
+
+(familyFilter=="" ||
+m.family==familyFilter)
+
+);
+
+})
+
+.forEach((m,index)=>{
+
+tbody.innerHTML += `
+
+<tr>
+
+<td>${m.name}</td>
+<td>${m.number}</td>
+<td>${m.santarali}</td>
+<td>${m.family}</td>
+
+<td>${m.church}</td>
+<td>${m.noheli}</td>
+<td>${m.pasika}</td>
+<td>${m.asomusiyo}</td>
+<td>${m.inyubako}</td>
+<td>${m.diyosezi}</td>
+
+<td>${m.date}</td>
+
+<td>
+
+<button class="delete"
+onclick="deleteMember(${index})">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
 
 }
 
 function deleteMember(index){
 
+if(confirm("Delete uyu mukristu?")){
+
 members.splice(index,1);
 
-localStorage.setItem("members", JSON.stringify(members));
+localStorage.setItem(
+"members",
+JSON.stringify(members)
+);
 
 showMembers();
 
+updateTotals();
+
+updateFilters();
+
 }
-
-function searchMember(){
-
-let keyword = document.getElementById("search").value.toLowerCase();
-
-let list = document.getElementById("members");
-
-list.innerHTML = "";
-
-members
-.filter(member =>
-member.name.toLowerCase().includes(keyword) ||
-member.number.toLowerCase().includes(keyword) ||
-member.family.toLowerCase().includes(keyword) ||
-member.santarali.toLowerCase().includes(keyword)
-)
-
-.forEach((member,index)=>{
-
-list.innerHTML += `
-<div class="member">
-
-<b>${member.name}</b><br>
-
-Numero: ${member.number}<br>
-
-Umuryango: ${member.family}<br>
-
-Santarali: ${member.santarali}<br>
-
-Ituro: ${member.amount} Frw
-
-</div>
-`;
-
-});
 
 }
 
 function logout(){
-window.location.href = "index.html";
+
+window.location.href="index.html";
+
 }
 
 showMembers();
+updateTotals();
+updateFilters();
 
 </script>
 
