@@ -1,181 +1,95 @@
-let members = JSON.parse(localStorage.getItem("members")) || [];
+// Firebase Import
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-function login(){
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-let email = document.getElementById("email").value;
-let password = document.getElementById("password").value;
-
-if(
-(email === "admin@gmail.com" && password === "1234") ||
-(email === "comptable@gmail.com" && password === "1234") ||
-(email === "secretary@gmail.com" && password === "1234")
-){
-
-window.location.href = "dashboard.html";
-
-}else{
-alert("Wrong credentials");
-}
-
-}
-
-function logout(){
-window.location.href = "index.html";
-}
-
-function formatDate(dateString){
-
-let d = new Date(dateString);
-
-let day = String(d.getDate()).padStart(2,'0');
-let month = String(d.getMonth()+1).padStart(2,'0');
-let year = d.getFullYear();
-
-return `${day}/${month}/${year}`;
-
-}
-
-function saveMember(){
-
-let numero = document.getElementById("numero").value;
-
-let contribution = {
-
-italiki:formatDate(document.getElementById("italiki").value),
-
-umwaka:document.getElementById("umwaka").value,
-
-kiliziya:Number(document.getElementById("kiliziya").value || 0),
-noheli:Number(document.getElementById("noheli").value || 0),
-pasika:Number(document.getElementById("pasika").value || 0),
-asomusiyo:Number(document.getElementById("asomusiyo").value || 0),
-inyubako:Number(document.getElementById("inyubako").value || 0),
-diyosezi:Number(document.getElementById("diyosezi").value || 0)
-
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyBKy8BRVEykWT0H2Ro-3yKuD8HsFyk12sk",
+  authDomain: "rukara-ituro-system.firebaseapp.com",
+  projectId: "rukara-ituro-system",
+  storageBucket: "rukara-ituro-system.firebasestorage.app",
+  messagingSenderId: "638528716738",
+  appId: "1:638528716738:web:3e55d50d52b94006afe05b"
 };
 
-let found = members.find(m => m.numero === numero);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-if(found){
+// Save Christian
+window.saveChristian = async function () {
 
-found.contributions.push(contribution);
+  let amazina = document.getElementById("amazina").value;
+  let phone = document.getElementById("phone").value;
+  let santarali = document.getElementById("santarali").value;
+  let umuryangoremezo = document.getElementById("umuryangoremezo").value;
+  let contributionYear = document.getElementById("year").value;
+  let contributionDate = document.getElementById("date").value;
 
-}else{
+  let kiliziya = document.getElementById("kiliziya").value;
+  let noheli = document.getElementById("noheli").value;
+  let pasika = document.getElementById("pasika").value;
+  let asomusiyo = document.getElementById("asomusiyo").value;
+  let inyubako = document.getElementById("inyubako").value;
+  let diyosezi = document.getElementById("diyosezi").value;
 
-members.push({
+  await addDoc(collection(db, "abakristu"), {
+    amazina,
+    phone,
+    santarali,
+    umuryangoremezo,
+    contributionYear,
+    contributionDate,
+    kiliziya,
+    noheli,
+    pasika,
+    asomusiyo,
+    inyubako,
+    diyosezi
+  });
 
-amazina:document.getElementById("amazina").value,
-numero,
-phone:document.getElementById("phone").value,
-santarali:document.getElementById("santarali").value,
-umuryangoremezo:document.getElementById("umuryangoremezo").value,
-contributions:[contribution]
+  alert("Amakuru yabitswe neza");
 
-});
+  window.location.href = "dashboard.html";
+};
 
-}
+// Load Christians
+window.loadChristians = async function () {
 
-localStorage.setItem("members", JSON.stringify(members));
+  let list = document.getElementById("list");
+  list.innerHTML = "";
 
-alert("Saved successfully");
+  const querySnapshot = await getDocs(collection(db, "abakristu"));
 
-window.location.href = "dashboard.html";
+  querySnapshot.forEach((doc) => {
 
-}
+    let data = doc.data();
 
-function searchMember(){
+    list.innerHTML += `
+      <div class="member-card">
+        <h3>${data.amazina}</h3>
 
-let keyword = document.getElementById("searchInput").value.toLowerCase();
+        <p><b>Phone:</b> ${data.phone}</p>
+        <p><b>Santarali:</b> ${data.santarali}</p>
+        <p><b>Umuryangoremezo:</b> ${data.umuryangoremezo}</p>
+        <p><b>Umwaka:</b> ${data.contributionYear}</p>
+        <p><b>Italiki:</b> ${data.contributionDate}</p>
 
-let results = document.getElementById("results");
+        <hr>
 
-results.innerHTML = "";
-
-members.filter(m =>
-
-m.amazina.toLowerCase().includes(keyword) ||
-m.numero.toLowerCase().includes(keyword)
-
-)
-
-.forEach((m,index)=>{
-
-results.innerHTML += `
-
-<div class="result-item" onclick="openMember(${index})">
-
-<h3>${m.amazina}</h3>
-
-<p>${m.numero}</p>
-
-<button>OK</button>
-
-</div>
-
-`;
-
-});
-
-}
-
-function openMember(index){
-
-localStorage.setItem("selectedMember", index);
-
-window.location.href = "member.html";
-
-}
-
-function loadMemberFile(){
-
-let index = localStorage.getItem("selectedMember");
-
-if(index === null) return;
-
-let m = members[index];
-
-let div = document.getElementById("memberFile");
-
-if(!div) return;
-
-let contributionsHtml = "";
-
-m.contributions.forEach(c=>{
-
-contributionsHtml += `
-
-<div class="contrib">
-
-<p><b>Itariki:</b> ${c.italiki}</p>
-<p><b>Umwaka:</b> ${c.umwaka}</p>
-<p>Kiliziya: ${c.kiliziya} Frw</p>
-<p>Noheli: ${c.noheli} Frw</p>
-<p>Pasika: ${c.pasika} Frw</p>
-<p>Asomusiyo: ${c.asomusiyo} Frw</p>
-<p>Inyubako: ${c.inyubako} Frw</p>
-<p>Diyosezi: ${c.diyosezi} Frw</p>
-
-</div>
-
-`;
-
-});
-
-div.innerHTML = `
-
-<h1>${m.amazina}</h1>
-
-<p><b>Numero:</b> ${m.numero}</p>
-<p><b>Phone:</b> ${m.phone || "Nta nimero"}</p>
-<p><b>Santarali:</b> ${m.santarali}</p>
-<p><b>Umuryangoremezo:</b> ${m.umuryangoremezo}</p>
-
-<h2>Contribution History</h2>
-
-${contributionsHtml}
-
-`;
-
-}
-
-loadMemberFile();
+        <p>Kiliziya: ${data.kiliziya}</p>
+        <p>Noheli: ${data.noheli}</p>
+        <p>Pasika: ${data.pasika}</p>
+        <p>Asomusiyo: ${data.asomusiyo}</p>
+        <p>Inyubako: ${data.inyubako}</p>
+        <p>Diyosezi: ${data.diyosezi}</p>
+      </div>
+    `;
+  });
+    }
