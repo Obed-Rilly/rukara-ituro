@@ -1,34 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rukara Ituro Login</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rukara Ituro System</title>
+
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div class="login-box">
+<div class="container">
 
-<img src="logo.png" class="logo">
+  <div class="logo-box">
+    <img src="logo.png" class="logo">
+    <h1>RUKARA ITURO SYSTEM</h1>
+  </div>
 
-<h1>Rukara Ituro System</h1>
+  <div class="form-box">
 
-<input type="email" id="email" placeholder="Email">
+    <input type="text" id="amazina" placeholder="Amazina y'umukristu">
 
-<input type="password" id="password" placeholder="Password">
+    <input type="text" id="phone" placeholder="Phone Number (optional)">
 
-<select id="role">
-<option>Admin</option>
-<option>Comptable</option>
-<option>Secretary</option>
-</select>
+    <input type="text" id="santarali" placeholder="Santarali">
 
-<button onclick="login()">Login</button>
+    <input type="text" id="umuryangoremezo" placeholder="Umuryangoremezo">
+
+    <input type="number" id="umwaka" placeholder="Umwaka">
+
+    <input type="date" id="italiki">
+
+    <h2>Contributions</h2>
+
+    <input type="number" id="kiliziya" placeholder="Ituro rya Kiliziya">
+
+    <input type="number" id="noheli" placeholder="Noheli">
+
+    <input type="number" id="pasika" placeholder="Pasika">
+
+    <input type="number" id="asomusiyo" placeholder="Asomusiyo">
+
+    <input type="number" id="inyubako" placeholder="Inyubako">
+
+    <input type="number" id="diyosezi" placeholder="Inkunga ya Diyosezi">
+
+    <button onclick="saveMember()">
+      SAVE UMUKRISTU
+    </button>
+
+  </div>
 
 </div>
 
-<script src="app.js"></script>
+<script type="module" src="app.js"></script>
 
 </body>
-</html>
+      </html>
