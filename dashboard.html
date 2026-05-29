@@ -1,79 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard</title>
-<link rel="stylesheet" href="style.css">
+  <title>Rukara Ituro Dashboard</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <script type="module" src="app.js"></script>
 </head>
+
 <body>
 
-<div class="sidebar">
+<header>
 
-<img src="logo.png" class="logo-small">
+  <img src="logo.png" class="logo">
 
-<h2>RUKARA</h2>
+  <h1>Rukara Ituro System V3</h1>
 
-<a href="dashboard.html">Home</a>
-<a href="search.html">Search</a>
-<a href="#">Reports</a>
-<a href="#" onclick="logout()">Logout</a>
+</header>
 
-</div>
+<div class="container">
 
-<div class="main">
+  <div class="card">
 
-<div class="topbar">
-<h1>Dashboard</h1>
-<p id="today"></p>
-</div>
+    <h2>Kwandikisha Umukristu</h2>
 
-<div class="cards">
-<div class="card">
-<h3>Total Kiliziya</h3>
-<p id="totalKiliziya">0 Frw</p>
-</div>
+    <input type="text" id="amazina" placeholder="Amazina">
 
-<div class="card">
-<h3>Total Noheli</h3>
-<p id="totalNoheli">0 Frw</p>
-</div>
+    <input type="text" id="phone" placeholder="Phone Number">
 
-<div class="card">
-<h3>Total Pasika</h3>
-<p id="totalPasika">0 Frw</p>
-</div>
-</div>
+    <input type="text" id="santarali" placeholder="Santarali">
 
-<div class="form-box">
+    <input type="text" id="umuryangoremezo" placeholder="Umuryangoremezo">
 
-<h2>Kwandikisha Contribution</h2>
+    <input type="text" id="year" placeholder="Umwaka">
 
-<input type="text" id="amazina" placeholder="Amazina">
-<input type="text" id="numero" placeholder="Numero y'Umukristu">
-<input type="text" id="phone" placeholder="Phone Number (optional)">
-<input type="text" id="santarali" placeholder="Santarali">
-<input type="text" id="umuryangoremezo" placeholder="Umuryangoremezo">
+    <input type="text" id="date" placeholder="Day/Month/Year">
 
-<input type="number" id="kiliziya" placeholder="Ituro rya Kiliziya">
-<input type="number" id="noheli" placeholder="Noheli">
-<input type="number" id="pasika" placeholder="Pasika">
-<input type="number" id="asomusiyo" placeholder="Asomusiyo">
-<input type="number" id="inyubako" placeholder="Inyubako">
-<input type="number" id="diyosezi" placeholder="Inkunga ya Diyosezi">
+    <h3>Contributions</h3>
 
-<input type="date" id="italiki">
-<input type="number" id="umwaka" placeholder="Umwaka Contribution">
+    <input type="number" id="kiliziya" placeholder="Ituro rya Kiliziya">
 
-<button onclick="saveMember()">Save Contribution</button>
+    <input type="number" id="noheli" placeholder="Noheli">
+
+    <input type="number" id="pasika" placeholder="Pasika">
+
+    <input type="number" id="asomusiyo" placeholder="Asomusiyo">
+
+    <input type="number" id="inyubako" placeholder="Inyubako">
+
+    <input type="number" id="diyosezi" placeholder="Inkunga ya Diyosezi">
+
+    <button onclick="saveChristian()">SAVE</button>
+
+  </div>
+
+  <div class="card">
+
+    <h2>Abakristu</h2>
+
+    <div id="list"></div>
+
+  </div>
 
 </div>
 
-<div id="members"></div>
-
-</div>
-
-<script src="app.js"></script>
+<script>
+  setTimeout(() => {
+    loadChristians();
+  }, 1000);
+</script>
 
 </body>
 </html>
