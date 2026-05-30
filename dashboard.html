@@ -1,74 +1,303 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Rukara Ituro Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css">
+<title>Dashboard - Rukara Ituro System</title>
 
-  <script type="module" src="app.js"></script>
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+  font-family: Arial;
+  background:#f5f5f5;
+  margin:0;
+  padding:0;
+}
+
+.topbar{
+  background:#004080;
+  color:white;
+  padding:20px;
+  text-align:center;
+}
+
+.logo{
+  width:80px;
+  margin-bottom:10px;
+}
+
+.dashboard{
+  padding:15px;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.card{
+  background:white;
+  border-radius:12px;
+  padding:15px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.1);
+  text-align:center;
+}
+
+.card h2{
+  color:#004080;
+}
+
+.filters{
+  background:white;
+  padding:15px;
+  border-radius:12px;
+  margin-bottom:20px;
+}
+
+.filters input{
+  width:100%;
+  padding:12px;
+  margin-bottom:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+.member{
+  background:white;
+  padding:15px;
+  border-radius:12px;
+  margin-bottom:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.member button{
+  background:#004080;
+  color:white;
+  border:none;
+  padding:10px;
+  border-radius:8px;
+  width:100%;
+}
+
+</style>
+
 </head>
 
-<body>
+<body onload="loadDashboard()">
 
-<header>
+<div class="topbar">
 
-  <img src="logo.png" class="logo">
+<img src="logo.png" class="logo">
 
-  <h1>Rukara Ituro System V3</h1>
+<h1>RUKARA ITURO SYSTEM</h1>
 
-</header>
-
-<div class="container">
-
-  <div class="card">
-
-    <h2>Kwandikisha Umukristu</h2>
-
-    <input type="text" id="amazina" placeholder="Amazina">
-
-    <input type="text" id="phone" placeholder="Phone Number">
-
-    <input type="text" id="santarali" placeholder="Santarali">
-
-    <input type="text" id="umuryangoremezo" placeholder="Umuryangoremezo">
-
-    <input type="text" id="year" placeholder="Umwaka">
-
-    <input type="text" id="date" placeholder="Day/Month/Year">
-
-    <h3>Contributions</h3>
-
-    <input type="number" id="kiliziya" placeholder="Ituro rya Kiliziya">
-
-    <input type="number" id="noheli" placeholder="Noheli">
-
-    <input type="number" id="pasika" placeholder="Pasika">
-
-    <input type="number" id="asomusiyo" placeholder="Asomusiyo">
-
-    <input type="number" id="inyubako" placeholder="Inyubako">
-
-    <input type="number" id="diyosezi" placeholder="Inkunga ya Diyosezi">
-
-    <button onclick="saveChristian()">SAVE</button>
-
-  </div>
-
-  <div class="card">
-
-    <h2>Abakristu</h2>
-
-    <div id="list"></div>
-
-  </div>
+<p>Paroisse Rukara</p>
 
 </div>
 
-<script>
-  setTimeout(() => {
-    loadChristians();
-  }, 1000);
+<div class="dashboard">
+
+<div class="cards">
+
+<div class="card">
+<h3>Total Abakristu</h3>
+<h2 id="totalMembers">0</h2>
+</div>
+
+<div class="card">
+<h3>Total Kiliziya</h3>
+<h2 id="totalKiliziya">0</h2>
+</div>
+
+<div class="card">
+<h3>Total Noheli</h3>
+<h2 id="totalNoheli">0</h2>
+</div>
+
+<div class="card">
+<h3>Total Pasika</h3>
+<h2 id="totalPasika">0</h2>
+</div>
+
+<div class="card">
+<h3>Total Asomusiyo</h3>
+<h2 id="totalAsomusiyo">0</h2>
+</div>
+
+<div class="card">
+<h3>Total Inyubako</h3>
+<h2 id="totalInyubako">0</h2>
+</div>
+
+<div class="card">
+<h3>Total Diyosezi</h3>
+<h2 id="totalDiyosezi">0</h2>
+</div>
+
+</div>
+
+<div class="filters">
+
+<input type="text" id="searchInput" placeholder="Search umukristu..." onkeyup="searchMembers()">
+
+<input type="text" id="filterSantarali" placeholder="Filter by Santarali" onkeyup="searchMembers()">
+
+<input type="text" id="filterUmuryango" placeholder="Filter by Umuryangoremezo" onkeyup="searchMembers()">
+
+</div>
+
+<div id="membersList"></div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+}
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyBKy8BRVEykWT0H2Ro-3yKuD8HsFyk12sk",
+
+authDomain: "rukara-ituro-system.firebaseapp.com",
+
+projectId: "rukara-ituro-system",
+
+storageBucket: "rukara-ituro-system.firebasestorage.app",
+
+messagingSenderId: "638528716738",
+
+appId: "1:638528716738:web:3e55d50d52b94006afe05b"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+let allMembers = [];
+
+window.loadDashboard = async function(){
+
+const querySnapshot = await getDocs(collection(db,"abakristu"));
+
+let totalKiliziya = 0;
+let totalNoheli = 0;
+let totalPasika = 0;
+let totalAsomusiyo = 0;
+let totalInyubako = 0;
+let totalDiyosezi = 0;
+
+allMembers = [];
+
+querySnapshot.forEach((doc)=>{
+
+const data = doc.data();
+
+allMembers.push(data);
+
+totalKiliziya += data.contributions?.kiliziya || 0;
+totalNoheli += data.contributions?.noheli || 0;
+totalPasika += data.contributions?.pasika || 0;
+totalAsomusiyo += data.contributions?.asomusiyo || 0;
+totalInyubako += data.contributions?.inyubako || 0;
+totalDiyosezi += data.contributions?.diyosezi || 0;
+
+});
+
+document.getElementById("totalMembers").innerHTML = allMembers.length;
+
+document.getElementById("totalKiliziya").innerHTML = totalKiliziya;
+
+document.getElementById("totalNoheli").innerHTML = totalNoheli;
+
+document.getElementById("totalPasika").innerHTML = totalPasika;
+
+document.getElementById("totalAsomusiyo").innerHTML = totalAsomusiyo;
+
+document.getElementById("totalInyubako").innerHTML = totalInyubako;
+
+document.getElementById("totalDiyosezi").innerHTML = totalDiyosezi;
+
+showMembers(allMembers);
+
+}
+
+function showMembers(members){
+
+let output = "";
+
+members.forEach((member)=>{
+
+output += `
+
+<div class="member">
+
+<h3>${member.amazina}</h3>
+
+<p><b>Santarali:</b> ${member.santarali}</p>
+
+<p><b>Umuryangoremezo:</b> ${member.umuryangoremezo}</p>
+
+<p><b>Phone:</b> ${member.phone || "-"}</p>
+
+<p><b>Umwaka:</b> ${member.umwaka}</p>
+
+<p><b>Italiki:</b> ${member.italiki}</p>
+
+<button>
+Open File
+</button>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("membersList").innerHTML = output;
+
+}
+
+window.searchMembers = function(){
+
+const search = document.getElementById("searchInput").value.toLowerCase();
+
+const santarali = document.getElementById("filterSantarali").value.toLowerCase();
+
+const umuryango = document.getElementById("filterUmuryango").value.toLowerCase();
+
+const filtered = allMembers.filter(member =>
+
+(member.amazina || "").toLowerCase().includes(search)
+
+&&
+
+(member.santarali || "").toLowerCase().includes(santarali)
+
+&&
+
+(member.umuryangoremezo || "").toLowerCase().includes(umuryango)
+
+);
+
+showMembers(filtered);
+
+}
+
 </script>
 
 </body>
-</html>
+                         </html>
